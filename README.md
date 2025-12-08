@@ -1,20 +1,21 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Winove English Platform
 
-# Run and deploy your AI Studio app
+Aplicação web para apresentação dos serviços de inglês da professora Carol Fava, com teste de nível automatizado e navegação otimizada.
 
-This contains everything you need to run your app locally.
+## Como executar localmente
 
-View your app in AI Studio: https://ai.studio/apps/drive/1eB_FUQ3vOjIBrTPeF9BTBydlwbREurbq
+**Pré-requisitos:** Node.js
 
-## Run Locally
+1. Instale as dependências:
+   ```
+   npm install
+   ```
+2. Configure a variável `GEMINI_API_KEY` em [.env.local](.env.local) com a chave da Winove AI (compatível com Gemini).
+3. Execute o aplicativo:
+   ```
+   npm run dev
+   ```
 
-**Prerequisites:**  Node.js
+## Implantação
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+O projeto utiliza Vite com `HashRouter`, permitindo que as rotas funcionem corretamente mesmo em ambientes estáticos ou hospedagem compartilhada.
