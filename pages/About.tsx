@@ -2,6 +2,7 @@ import React from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { Award, BookOpen, Heart } from 'lucide-react';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const About: React.FC = () => {
   return (
@@ -23,7 +24,11 @@ const About: React.FC = () => {
               </p>
             </div>
             <div className="mt-8">
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+              <a
+                href={buildWhatsAppLink('Olá! Vim pela página Sobre e quero saber mais sobre as aulas.')}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Button>Vamos conversar?</Button>
               </a>
             </div>

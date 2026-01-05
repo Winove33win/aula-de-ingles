@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
 import { NavRoute } from '../types';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,7 @@ const Header: React.FC = () => {
             </NavLink>
           ))}
           <a 
-            href="https://wa.me/5511999999999" // Example WhatsApp
+            href={buildWhatsAppLink('Olá! Vim pelo site e quero falar sobre aulas de inglês.')}
             target="_blank" 
             rel="noopener noreferrer"
             className="bg-brand-red text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-red-800 transition-colors flex items-center gap-2"
@@ -95,7 +96,7 @@ const Header: React.FC = () => {
             </NavLink>
           ))}
            <a 
-            href="https://wa.me/5511999999999" 
+            href={buildWhatsAppLink('Olá! Vim pelo site e quero falar sobre aulas de inglês.')}
             className="mt-2 w-full bg-green-600 text-white py-3 rounded-lg flex items-center justify-center gap-2 font-bold"
           >
             <Phone size={20} />

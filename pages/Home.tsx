@@ -1,10 +1,73 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle, Quote } from 'lucide-react';
 import Section from '../components/Section';
 import Button from '../components/Button';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const Home: React.FC = () => {
+  const testimonials = useMemo(
+    () => [
+      {
+        quote:
+          'Melhor professora, melhor aula e melhor método! Amo todas as aulas e sempre estou aprendendo mais. Carisma, empatia, um ótimo humor e vontade de ensinar é tudo que um bom professor precisa, e ela tem tudo isso de sobra!',
+        author: 'Lucas Filletti Nascimento',
+      },
+      {
+        quote:
+          'Nunca é tarde para aprender outra língua. Aos 50 anos resolvi enfrentar esse desafio que estava adiando há anos e por diversos motivos. Então, quando conheci a teacher Carol e seu método dinâmico, criativo e muito estimulante, tomei a decisão de estudar inglês. Posso dizer que foi um processo prazeroso e divertido esse aprendizado. O prazer foi ainda maior quando percebi que conseguia me comunicar com nativos. Obrigada querida professora por tornar esse meu sonho possível.',
+        author: 'Rosa A. C. Zoppi',
+      },
+      {
+        quote:
+          'Adoro as aula de inglês da professora Carol Fava! Aulas diversificadas, dinâmicas, super recomendo!',
+        author: 'Marinês Lotúmolo',
+        role: 'Historiadora',
+      },
+      {
+        quote:
+          'Conheci a professora Carol quando depois de um tempo eu quis voltar a estudar inglês para não perder a fluência. Falei com a Carol e ela se dispôs a dar aulas em um modelo super dinâmico onde cada aula era diferente da outra. Chegamos a fazer massinha de modelar ouvindo a receita em inglês. Super criativa. A pronúncia dela é perfeita e não mede esforços para que o aluno atinja os seus objetivos. She is really an awesome English Teacher.',
+        author: 'Luiz Machado',
+        role: 'Director in a Textile Company',
+      },
+      {
+        quote:
+          'A Teacher Carol é muito especial, tem paciência, conhecimento e didática para com seus alunos desde o básico, como eu.',
+        author: 'Silmara Freitas',
+        role: 'Psicóloga',
+      },
+      {
+        quote:
+          "I first had classes with Carol in Middle schoo, and back then I loved it. The classes were funny, interesting and very dinamic. She was able to make learning easy. So when I heard she was teaching online classes I just knew it was time to come back to study. And I'm very gratefull and happy for this.",
+        author: 'Nadine Pivetta',
+        role: 'Geologist',
+      },
+    ],
+    []
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 3000);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused, testimonials.length]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(prev + 1, testimonials.length - 1));
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -27,7 +90,11 @@ const Home: React.FC = () => {
               Aulas personalizadas focadas em comunicação real, negócios e desenvolvimento profissional. Chega de travar na hora de falar.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+              <a
+                href={buildWhatsAppLink('Olá! Vim pelo site e quero saber mais sobre as aulas.')}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Button>Fale comigo no WhatsApp</Button>
               </a>
               <Link to="/courses">
@@ -148,19 +215,62 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="relative h-full min-h-[400px] bg-gray-800 rounded-2xl p-8 flex flex-col justify-center border border-gray-700">
-             <div className="absolute top-4 right-4 text-gray-600">
+          <div
+            className="relative h-full min-h-[400px] bg-gray-800 rounded-2xl p-8 flex flex-col justify-center border border-gray-700"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+             <div className="absolute top-4 right-4 text-gray-600 z-0">
                <Map size={48} opacity={0.2} />
              </div>
-             <blockquote className="text-xl italic text-gray-300 mb-6">
-               "A metodologia da Carol é diferente de tudo que já tentei. Não fico decorando regras, eu aprendo a usar o inglês no meu dia a dia de trabalho."
-             </blockquote>
-             <div className="flex items-center gap-4">
-               <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
-               <div>
-                 <p className="font-bold text-white">Roberto M.</p>
-                 <p className="text-sm text-gray-500">Engenheiro de Software</p>
+             <div className="relative z-10 flex items-center justify-between mb-6">
+               <span className="text-sm uppercase tracking-wider text-gray-500">Depoimentos</span>
+               <div className="flex items-center gap-2">
+                 <button
+                   type="button"
+                   onClick={handlePrev}
+                   disabled={currentIndex === 0}
+                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                   aria-label="Depoimento anterior"
+                 >
+                   <ArrowLeft size={16} />
+                 </button>
+                 <button
+                   type="button"
+                   onClick={handleNext}
+                   disabled={currentIndex === testimonials.length - 1}
+                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                   aria-label="Próximo depoimento"
+                 >
+                   <ArrowRight size={16} />
+                 </button>
                </div>
+             </div>
+
+             <div className="overflow-hidden">
+               <div
+                 className="flex transition-transform duration-500 ease-out"
+                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+               >
+                 {testimonials.map((item, idx) => (
+                   <div key={idx} className="w-full flex-shrink-0">
+                     <div className="flex flex-col h-full">
+                       <Quote size={32} className="text-brand-red mb-4" />
+                       <blockquote className="text-xl italic text-gray-200 mb-6">
+                         “{item.quote}”
+                       </blockquote>
+                       <div className="mt-auto">
+                         <p className="font-semibold text-white">{item.author}</p>
+                         {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+
+             <div className="mt-6 text-sm text-gray-500">
+               {currentIndex + 1} de {testimonials.length}
              </div>
           </div>
         </div>
@@ -259,7 +369,11 @@ const Home: React.FC = () => {
         <p className="text-red-100 text-lg mb-8 max-w-2xl mx-auto">
           Agende uma conversa gratuita de 15 minutos para nos conhecermos e traçarmos seu plano de estudos.
         </p>
-        <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+        <a
+          href={buildWhatsAppLink('Olá! Quero agendar uma conversa gratuita de 15 minutos.')}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Button variant="white" className="mx-auto">
             Falar no WhatsApp Agora
           </Button>
