@@ -2,6 +2,7 @@ import React from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { Mail, MapPin, Phone, MessageSquare } from 'lucide-react';
+import { buildWhatsAppLink, WHATSAPP_DISPLAY } from '../services/whatsapp';
 
 const Contact: React.FC = () => {
   return (
@@ -26,8 +27,13 @@ const Contact: React.FC = () => {
               <div>
                 <h3 className="font-bold text-gray-900">WhatsApp</h3>
                 <p className="text-gray-500 text-sm mb-2">Resposta rápida (Seg-Sex, 9h-18h)</p>
-                <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer" className="text-brand-red font-semibold hover:underline">
-                  +55 (11) 99999-9999
+                <a
+                  href={buildWhatsAppLink('Olá! Vim pela página de contato e gostaria de informações.')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-brand-red font-semibold hover:underline"
+                >
+                  {WHATSAPP_DISPLAY}
                 </a>
               </div>
             </div>
@@ -67,7 +73,12 @@ const Contact: React.FC = () => {
               <p className="text-gray-600 mb-8">
                 É gratuito e sem compromisso. Vamos avaliar seu nível e definir o melhor plano para você.
               </p>
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer" className="block w-full">
+              <a
+                href={buildWhatsAppLink('Olá! Quero agendar uma aula experimental gratuita.')}
+                target="_blank"
+                rel="noreferrer"
+                className="block w-full"
+              >
                 <Button fullWidth>
                   Agendar no WhatsApp
                 </Button>
