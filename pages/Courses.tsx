@@ -2,6 +2,7 @@ import React from 'react';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { Briefcase, MessageCircle, GraduationCap, Check, Wifi } from 'lucide-react';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const courses = [
   {
@@ -111,7 +112,11 @@ const Courses: React.FC = () => {
                     </ul>
                 </div>
                 <div className="pt-2">
-                   <a href={`https://wa.me/5511999999999?text=Olá, tenho interesse no curso de ${course.title}`} target="_blank" rel="noreferrer">
+                   <a
+                     href={buildWhatsAppLink(`Olá! Tenho interesse no curso de ${course.title}.`)}
+                     target="_blank"
+                     rel="noreferrer"
+                   >
                     <Button>Quero saber mais sobre este curso</Button>
                   </a>
                 </div>
@@ -156,7 +161,11 @@ const Courses: React.FC = () => {
           Faça uma aula experimental gratuita para descobrir o melhor caminho para você.
         </p>
         <div className="flex justify-center gap-4">
-           <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+           <a
+             href={buildWhatsAppLink('Olá! Quero agendar uma avaliação gratuita para escolher o curso ideal.')}
+             target="_blank"
+             rel="noreferrer"
+           >
              <Button variant="outline" className="border-brand-red text-brand-red hover:bg-brand-red hover:text-white">
                  Agendar Avaliação Gratuita
              </Button>

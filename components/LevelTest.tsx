@@ -3,6 +3,7 @@ import { MessageSquare, Sparkles, Loader2, RefreshCw, CheckCircle } from 'lucide
 import Button from './Button';
 import { assessEnglishLevel } from '../services/geminiService';
 import { AssessmentResult } from '../types';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const LevelTest: React.FC = () => {
   const [text, setText] = useState('');
@@ -99,7 +100,7 @@ const LevelTest: React.FC = () => {
                 <RefreshCw size={18} /> Tentar Novamente
               </Button>
               <a 
-                href={`https://wa.me/5511999999999?text=Olá, fiz o teste no site e meu nível deu ${result.cefrLevel}. Gostaria de saber mais sobre o curso ${result.recommendedCourse}.`}
+                href={buildWhatsAppLink(`Olá! Fiz o teste no site e meu nível deu ${result.cefrLevel}. Gostaria de saber mais sobre o curso ${result.recommendedCourse}.`)}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1"

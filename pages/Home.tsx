@@ -1,10 +1,80 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle } from 'lucide-react';
 import Section from '../components/Section';
 import Button from '../components/Button';
+import { buildWhatsAppLink } from '../services/whatsapp';
 
 const Home: React.FC = () => {
+  const testimonials = useMemo(
+    () => [
+      {
+        quote:
+          'Melhor professora, melhor aula e melhor método! Amo todas as aulas e sempre estou aprendendo mais. Carisma, empatia, um ótimo humor e vontade de ensinar é tudo que um bom professor precisa, e ela tem tudo isso de sobra!',
+        author: 'Lucas Filletti Nascimento',
+      },
+      {
+        quote:
+          'Nunca é tarde para aprender outra língua. Aos 50 anos resolvi enfrentar esse desafio que estava adiando há anos e por diversos motivos. Então, quando conheci a teacher Carol e seu método dinâmico, criativo e muito estimulante, tomei a decisão de estudar inglês. Posso dizer que foi um processo prazeroso e divertido esse aprendizado. O prazer foi ainda maior quando percebi que conseguia me comunicar com nativos. Obrigada querida professora por tornar esse meu sonho possível.',
+        author: 'Rosa A. C. Zoppi',
+      },
+      {
+        quote:
+          'Adoro as aula de inglês da professora Carol Fava! Aulas diversificadas, dinâmicas, super recomendo!',
+        author: 'Marinês Lotúmolo',
+        role: 'Historiadora',
+      },
+      {
+        quote:
+          'Conheci a professora Carol quando depois de um tempo eu quis voltar a estudar inglês para não perder a fluência. Falei com a Carol e ela se dispôs a dar aulas em um modelo super dinâmico onde cada aula era diferente da outra. Chegamos a fazer massinha de modelar ouvindo a receita em inglês. Super criativa. A pronúncia dela é perfeita e não mede esforços para que o aluno atinja os seus objetivos. She is really an awesome English Teacher.',
+        author: 'Luiz Machado',
+        role: 'Director in a Textile Company',
+      },
+      {
+        quote:
+          'A Teacher Carol é muito especial, tem paciência, conhecimento e didática para com seus alunos desde o básico, como eu.',
+        author: 'Silmara Freitas',
+        role: 'Psicóloga',
+      },
+      {
+        quote:
+          "I first had classes with Carol in Middle schoo, and back then I loved it. The classes were funny, interesting and very dinamic. She was able to make learning easy. So when I heard she was teaching online classes I just knew it was time to come back to study. And I'm very gratefull and happy for this.",
+        author: 'Nadine Pivetta',
+        role: 'Geologist',
+      },
+    ],
+    []
+  );
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsDesktop(event.matches);
+    };
+
+    setIsDesktop(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [isDesktop]);
+
+  const visibleCards = isDesktop ? 2 : 1;
+  const maxIndex = Math.max(testimonials.length - visibleCards, 0);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -27,7 +97,11 @@ const Home: React.FC = () => {
               Aulas personalizadas focadas em comunicação real, negócios e desenvolvimento profissional. Chega de travar na hora de falar.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+              <a
+                href={buildWhatsAppLink('Olá! Vim pelo site e quero saber mais sobre as aulas.')}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <Button>Fale comigo no WhatsApp</Button>
               </a>
               <Link to="/courses">
@@ -253,13 +327,75 @@ const Home: React.FC = () => {
         </div>
       </Section>
 
+      <Section>
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-brand-red font-semibold uppercase tracking-wider text-sm">Depoimentos</span>
+          <h2 className="text-3xl font-bold mt-2">O que os alunos dizem</h2>
+        </div>
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-sm text-gray-500">
+              {!isDesktop && (
+                <span>
+                  {currentIndex + 1} de {testimonials.length}
+                </span>
+              )}
+              {isDesktop && <span>{testimonials.length} depoimentos</span>}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                aria-label="Depoimento anterior"
+              >
+                <ArrowLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={currentIndex === maxIndex}
+                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                aria-label="Próximo depoimento"
+              >
+                <ArrowRight size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translateX(-${currentIndex * (100 / visibleCards)}%)` }}
+            >
+              {testimonials.map((item, idx) => (
+                <div key={idx} className="w-full md:w-1/2 flex-shrink-0 px-3">
+                  <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-full flex flex-col">
+                    <p className="text-gray-600 leading-relaxed mb-6">“{item.quote}”</p>
+                    <div className="mt-auto">
+                      <p className="font-semibold text-gray-900">{item.author}</p>
+                      {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Section>
+
       {/* Final CTA */}
       <section className="py-24 bg-brand-red text-white text-center px-6">
         <h2 className="text-3xl md:text-4xl font-bold mb-6">Pronto para dar o próximo passo?</h2>
         <p className="text-red-100 text-lg mb-8 max-w-2xl mx-auto">
           Agende uma conversa gratuita de 15 minutos para nos conhecermos e traçarmos seu plano de estudos.
         </p>
-        <a href="https://wa.me/5511999999999" target="_blank" rel="noreferrer">
+        <a
+          href={buildWhatsAppLink('Olá! Quero agendar uma conversa gratuita de 15 minutos.')}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Button variant="white" className="mx-auto">
             Falar no WhatsApp Agora
           </Button>
