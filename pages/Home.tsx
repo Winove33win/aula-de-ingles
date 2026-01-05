@@ -352,7 +352,7 @@ const Home: React.FC = () => {
           
           <div className="space-y-4">
             {[
-              { q: "As aulas são em grupo ou individuais?", a: "Trabalho principalmente com aulas individuais (VIP) para garantir atenção total aos seus objetivos, mas também ofereço pequenos grupos de conversação." },
+              { q: "As aulas são em grupo ou individuais?", a: "Trabalho principalmente com aulas individuais (VIP) para garantir atenção total aos seus objetivos, porém também tenho pequenos grupos cujo objetivo dos alunos é simular e com foco na conversação." },
               { q: "Preciso comprar material didático caro?", a: "Não. Eu forneço todo o material necessário, curado de fontes internacionais (Cambridge, Oxford, TED Talks) e adaptado para você." },
               { q: "Qual a duração das aulas?", a: "As sessões têm duração de 50 minutos a 1 hora, ideais para manter o foco máximo sem cansar sua rotina." },
               { q: "E se eu precisar desmarcar?", a: "Entendo que imprevistos acontecem. Com aviso prévio de 24 horas, podemos reagendar sua aula sem custo algum." }
