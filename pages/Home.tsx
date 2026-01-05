@@ -47,6 +47,22 @@ const Home: React.FC = () => {
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) {
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 3000);
+
+    return () => window.clearInterval(timer);
+  }, [isPaused, testimonials.length]);
+
+
+
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
@@ -202,11 +218,19 @@ const Home: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="relative h-full min-h-[400px] bg-gray-800 rounded-2xl p-8 flex flex-col justify-center border border-gray-700">
-             <div className="absolute top-4 right-4 text-gray-600">
+          <div
+            className="relative h-full min-h-[400px] bg-gray-800 rounded-2xl p-8 flex flex-col justify-center border border-gray-700"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+             <div className="absolute top-4 right-4 text-gray-600 z-0">
                <Map size={48} opacity={0.2} />
              </div>
+
+             <div className="relative z-10 flex items-center justify-between mb-6">
+
              <div className="flex items-center justify-between mb-6">
+
                <span className="text-sm uppercase tracking-wider text-gray-500">Depoimentos</span>
                <div className="flex items-center gap-2">
                  <button
@@ -227,6 +251,7 @@ const Home: React.FC = () => {
                  >
                    <ArrowRight size={16} />
                  </button>
+
                </div>
              </div>
 
@@ -251,6 +276,33 @@ const Home: React.FC = () => {
                  ))}
                </div>
              </div>
+
+
+               </div>
+             </div>
+
+             <div className="overflow-hidden">
+               <div
+                 className="flex transition-transform duration-500 ease-out"
+                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+               >
+                 {testimonials.map((item, idx) => (
+                   <div key={idx} className="w-full flex-shrink-0">
+                     <div className="flex flex-col h-full">
+                       <Quote size={32} className="text-brand-red mb-4" />
+                       <blockquote className="text-xl italic text-gray-200 mb-6">
+                         “{item.quote}”
+                       </blockquote>
+                       <div className="mt-auto">
+                         <p className="font-semibold text-white">{item.author}</p>
+                         {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+
 
              <div className="mt-6 text-sm text-gray-500">
                {currentIndex + 1} de {testimonials.length}
