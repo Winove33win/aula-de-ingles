@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Globe, TrendingUp, Users, Map, Calendar, HelpCircle, MessageCircle, Quote } from 'lucide-react';
 import Section from '../components/Section';
 import Button from '../components/Button';
 import { buildWhatsAppLink } from '../services/whatsapp';
@@ -45,34 +45,14 @@ const Home: React.FC = () => {
     ],
     []
   );
-  const [isDesktop, setIsDesktop] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-    const handleChange = (event: MediaQueryListEvent) => {
-      setIsDesktop(event.matches);
-    };
-
-    setIsDesktop(mediaQuery.matches);
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [isDesktop]);
-
-  const visibleCards = isDesktop ? 2 : 1;
-  const maxIndex = Math.max(testimonials.length - visibleCards, 0);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+    setCurrentIndex((prev) => Math.min(prev + 1, testimonials.length - 1));
   };
 
   return (
@@ -226,15 +206,54 @@ const Home: React.FC = () => {
              <div className="absolute top-4 right-4 text-gray-600">
                <Map size={48} opacity={0.2} />
              </div>
-             <blockquote className="text-xl italic text-gray-300 mb-6">
-               "A metodologia da Carol é diferente de tudo que já tentei. Não fico decorando regras, eu aprendo a usar o inglês no meu dia a dia de trabalho."
-             </blockquote>
-             <div className="flex items-center gap-4">
-               <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
-               <div>
-                 <p className="font-bold text-white">Roberto M.</p>
-                 <p className="text-sm text-gray-500">Engenheiro de Software</p>
+             <div className="flex items-center justify-between mb-6">
+               <span className="text-sm uppercase tracking-wider text-gray-500">Depoimentos</span>
+               <div className="flex items-center gap-2">
+                 <button
+                   type="button"
+                   onClick={handlePrev}
+                   disabled={currentIndex === 0}
+                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                   aria-label="Depoimento anterior"
+                 >
+                   <ArrowLeft size={16} />
+                 </button>
+                 <button
+                   type="button"
+                   onClick={handleNext}
+                   disabled={currentIndex === testimonials.length - 1}
+                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                   aria-label="Próximo depoimento"
+                 >
+                   <ArrowRight size={16} />
+                 </button>
                </div>
+             </div>
+
+             <div className="overflow-hidden">
+               <div
+                 className="flex transition-transform duration-500 ease-out"
+                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+               >
+                 {testimonials.map((item, idx) => (
+                   <div key={idx} className="w-full flex-shrink-0">
+                     <div className="flex flex-col h-full">
+                       <Quote size={32} className="text-brand-red mb-4" />
+                       <blockquote className="text-xl italic text-gray-200 mb-6">
+                         “{item.quote}”
+                       </blockquote>
+                       <div className="mt-auto">
+                         <p className="font-semibold text-white">{item.author}</p>
+                         {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
+                       </div>
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </div>
+
+             <div className="mt-6 text-sm text-gray-500">
+               {currentIndex + 1} de {testimonials.length}
              </div>
           </div>
         </div>
@@ -324,64 +343,6 @@ const Home: React.FC = () => {
               <Link to="/courses" className="text-sm font-semibold text-gray-900 underline decoration-gray-300 underline-offset-4 group-hover:decoration-brand-red">Saiba mais</Link>
             </div>
           ))}
-        </div>
-      </Section>
-
-      <Section>
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-brand-red font-semibold uppercase tracking-wider text-sm">Depoimentos</span>
-          <h2 className="text-3xl font-bold mt-2">O que os alunos dizem</h2>
-        </div>
-        <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3 text-sm text-gray-500">
-              {!isDesktop && (
-                <span>
-                  {currentIndex + 1} de {testimonials.length}
-                </span>
-              )}
-              {isDesktop && <span>{testimonials.length} depoimentos</span>}
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
-                aria-label="Depoimento anterior"
-              >
-                <ArrowLeft size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                disabled={currentIndex === maxIndex}
-                className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
-                aria-label="Próximo depoimento"
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
-          </div>
-
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${currentIndex * (100 / visibleCards)}%)` }}
-            >
-              {testimonials.map((item, idx) => (
-                <div key={idx} className="w-full md:w-1/2 flex-shrink-0 px-3">
-                  <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-full flex flex-col">
-                    <p className="text-gray-600 leading-relaxed mb-6">“{item.quote}”</p>
-                    <div className="mt-auto">
-                      <p className="font-semibold text-gray-900">{item.author}</p>
-                      {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </Section>
 
