@@ -223,90 +223,59 @@ const Home: React.FC = () => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-             <div className="absolute top-4 right-4 text-gray-600 z-0">
-               <Map size={48} opacity={0.2} />
-             </div>
+            <div className="absolute top-4 right-4 text-gray-600 z-0">
+              <Map size={48} opacity={0.2} />
+            </div>
 
-             <div className="relative z-10 flex items-center justify-between mb-6">
+            <div className="relative z-10 flex items-center justify-between mb-6">
+              <span className="text-sm uppercase tracking-wider text-gray-500">Depoimentos</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                  aria-label="Depoimento anterior"
+                >
+                  <ArrowLeft size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  disabled={currentIndex === testimonials.length - 1}
+                  className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
+                  aria-label="Próximo depoimento"
+                >
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
 
-             <div className="flex items-center justify-between mb-6">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {testimonials.map((item, idx) => (
+                  <div key={idx} className="w-full flex-shrink-0">
+                    <div className="flex flex-col h-full">
+                      <Quote size={32} className="text-brand-red mb-4" />
+                      <blockquote className="text-xl italic text-gray-200 mb-6">
+                        “{item.quote}”
+                      </blockquote>
+                      <div className="mt-auto">
+                        <p className="font-semibold text-white">{item.author}</p>
+                        {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-               <span className="text-sm uppercase tracking-wider text-gray-500">Depoimentos</span>
-               <div className="flex items-center gap-2">
-                 <button
-                   type="button"
-                   onClick={handlePrev}
-                   disabled={currentIndex === 0}
-                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
-                   aria-label="Depoimento anterior"
-                 >
-                   <ArrowLeft size={16} />
-                 </button>
-                 <button
-                   type="button"
-                   onClick={handleNext}
-                   disabled={currentIndex === testimonials.length - 1}
-                   className="w-9 h-9 rounded-full border border-gray-700 text-gray-400 flex items-center justify-center disabled:opacity-40 disabled:cursor-not-allowed hover:border-brand-red hover:text-brand-red transition-colors"
-                   aria-label="Próximo depoimento"
-                 >
-                   <ArrowRight size={16} />
-                 </button>
-
-               </div>
-             </div>
-
-             <div className="overflow-hidden">
-               <div
-                 className="flex transition-transform duration-500 ease-out"
-                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-               >
-                 {testimonials.map((item, idx) => (
-                   <div key={idx} className="w-full flex-shrink-0">
-                     <div className="flex flex-col h-full">
-                       <Quote size={32} className="text-brand-red mb-4" />
-                       <blockquote className="text-xl italic text-gray-200 mb-6">
-                         “{item.quote}”
-                       </blockquote>
-                       <div className="mt-auto">
-                         <p className="font-semibold text-white">{item.author}</p>
-                         {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
-                       </div>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-             </div>
-
-
-               </div>
-             </div>
-
-             <div className="overflow-hidden">
-               <div
-                 className="flex transition-transform duration-500 ease-out"
-                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-               >
-                 {testimonials.map((item, idx) => (
-                   <div key={idx} className="w-full flex-shrink-0">
-                     <div className="flex flex-col h-full">
-                       <Quote size={32} className="text-brand-red mb-4" />
-                       <blockquote className="text-xl italic text-gray-200 mb-6">
-                         “{item.quote}”
-                       </blockquote>
-                       <div className="mt-auto">
-                         <p className="font-semibold text-white">{item.author}</p>
-                         {item.role && <p className="text-sm text-gray-500">{item.role}</p>}
-                       </div>
-                     </div>
-                   </div>
-                 ))}
-               </div>
-             </div>
-
-
-             <div className="mt-6 text-sm text-gray-500">
-               {currentIndex + 1} de {testimonials.length}
-             </div>
+            <div className="mt-6 text-sm text-gray-500">
+              {currentIndex + 1} de {testimonials.length}
+            </div>
           </div>
         </div>
       </Section>
