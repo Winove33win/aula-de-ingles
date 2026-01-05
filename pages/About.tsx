@@ -14,7 +14,7 @@ const About: React.FC = () => {
             <h2 className="text-xl text-gray-600 font-medium mb-6">Professora de Inglês, Mentora e Apaixonada por Educação.</h2>
             <div className="space-y-4 text-gray-600 leading-relaxed text-lg">
               <p>
-                Com mais de 10 anos de experiência em ensino de língua inglesa, minha missão é desmistificar o aprendizado e torná-lo parte natural da sua vida.
+                Com mais de 40 anos de experiência em ensino de língua inglesa, minha missão é desmistificar o aprendizado e torná-lo parte natural da sua vida.
               </p>
               <p>
                 Acredito que cada aluno é único. Por isso, abandonei os métodos de "receita de bolo" das escolas tradicionais para focar no que realmente importa: <strong>sua comunicação, sua confiança e seus resultados.</strong>
